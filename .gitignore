@@ -1,0 +1,4 @@
+*.o          # ignora tutti i file oggetto della compilazione
+build-*/     # ignora tutte le cartelle che iniziano con build-
+*.user       # ignora i file di configurazione utente di Qt Creator
+
