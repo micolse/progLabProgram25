@@ -3,9 +3,11 @@
 
 #include <vector>
 #include <algorithm>
-#include "Observer.h"
+#include <QObject>
+#include "observer.h"
 
-class Subject {
+class Subject : public QObject {
+    Q_OBJECT
 public:
     void attach(Observer* obsv) { //attach appunto serve a registrare gli obsv, cioè ad "attaccarli" nel vettore
         observers.push_back(obsv);
