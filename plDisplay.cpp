@@ -1,14 +1,52 @@
 #include "plDisplay.h"
+#include <QVBoxLayout>
+#include <QPixmap>
+#include <QDebug>
 
-PlDisplay::PlDisplay(Playlist* playlist, QObject* parent) : QObject(parent), playlistRef(playlist) {
-    playlistRef->attach(this); //che era fatto nell'header, ora lo aggiungerà alla lista degli observer della playlist, così potrà ricevere notifiche per ogni cambiamento
+PlDisplay::PlDisplay(QWidget* parent) : QWidget(parent), playlistRef(nullptr) {
+    imageLabel = new QLabel(this);  //inizializza QLabel
+    imageLabel->setAlignment(Qt::AlignCenter);
 
-    qDebug() << "PlDisplay creato e agganciato alla Playlist come observer"; //trovo comodi i debug per capire a che punto della build sono
+    titleLabel = new QLabel("Titolo: ---", this);
+    authorLabel = new QLabel("Autore: ---", this);
+
+    QVBoxLayout* layout = new QVBoxLayout(this);    //layout
+    layout->addWidget(imageLabel);
+    layout->addWidget(titleLabel);
+    layout->addWidget(authorLabel);
+
+    setLayout(layout);
+
+    qDebug() << "PlDisplay creato";
+}
+
+void PlDisplay::setPlaylist(Playlist* playlist) {
+    playlistRef = playlist;
+    if (playlistRef) {
+        playlistRef->attach(this);  //attacco la playlist
+        qDebug() << "pldisp agganciato";
+    }
 }
 
 void PlDisplay::update(int currentIndex) { //qua aggiornerà la visualizzazione dell'imm cambiando la foto mostrata
-    qDebug() << "ricevuto aggiornamento: indice corr:" << currentIndex;
+    if (!playlistRef) {
+        qDebug() << "nessuna pl" << currentIndex;
+    }
 
-    QString currentImg = playlistRef->currentImage();
-    qDebug() << "Imm corrente:" << currentImg;
+    const Song& song = playlistRef->currentSong();
+
+    //agg immagine
+    QPixmap pixmap(song.getImagePath());
+    if (!pixmap.isNull()) {
+        imageLabel->setPixmap(pixmap.scaled(200, 200, Qt::KeepAspectRatio));
+    } else {
+        imageLabel->setText("imm non trovata");
+    }
+
+    //agg testi
+    titleLabel->setText(song.getTitle());
+    authorLabel->setText(song.getAuthor());
+
+    qDebug() << "pl aggiornato con" << song.getTitle() << ", " << song.getAuthor();
+
 }
