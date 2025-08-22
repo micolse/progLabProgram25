@@ -2,21 +2,10 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QDebug>
+#include <QPainter>
+#include <QPainterPath>
 
-PlDisplay::PlDisplay(QWidget* parent) : QWidget(parent), playlistRef(nullptr) {
-    imageLabel = new QLabel(this);  //inizializza QLabel
-    imageLabel->setAlignment(Qt::AlignCenter);
-
-    titleLabel = new QLabel("Titolo: ---", this);
-    authorLabel = new QLabel("Autore: ---", this);
-
-    QVBoxLayout* layout = new QVBoxLayout(this);    //layout
-    layout->addWidget(imageLabel);
-    layout->addWidget(titleLabel);
-    layout->addWidget(authorLabel);
-
-    setLayout(layout);
-
+PlDisplay::PlDisplay(QWidget* parent) : QWidget(parent), playlistRef(nullptr), imageLabel(nullptr), titleLabel(nullptr), authorLabel(nullptr) {
     qDebug() << "PlDisplay creato";
 }
 
@@ -28,24 +17,50 @@ void PlDisplay::setPlaylist(Playlist* playlist) {
     }
 }
 
+void PlDisplay::setLabels(QLabel* image, QLabel* title, QLabel* author) {
+    imageLabel = image;
+    titleLabel = title;
+    authorLabel = author;
+}
+
 void PlDisplay::update(int currentIndex) { //qua aggiornerà la visualizzazione dell'imm cambiando la foto mostrata
-    if (!playlistRef) {
-        qDebug() << "nessuna pl" << currentIndex;
+    if (!playlistRef || !imageLabel || !titleLabel || !authorLabel) {
+        qDebug() << "pl non inizializzata correttamente";
+        return;
     }
 
     const Song& song = playlistRef->currentSong();
 
-    //agg immagine
-    QPixmap pixmap(song.getImagePath());
-    if (!pixmap.isNull()) {
-        imageLabel->setPixmap(pixmap.scaled(200, 200, Qt::KeepAspectRatio));
+    QPixmap orig(song.getImagePath());
+    if (!orig.isNull()) {
+        QPixmap scaled = orig.scaled(380, 330, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+        QPixmap rounded(380, 330);
+        rounded.fill(Qt::transparent);
+
+        QPainter painter(&rounded);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        QPainterPath path;
+        path.addRoundedRect(0, 0, 380, 330, 20, 20);
+        painter.setClipPath(path);
+        painter.drawPixmap(0, 0, scaled);
+
+        QPen pen(Qt::black, 2);
+        painter.setPen(pen);
+        painter.drawRoundedRect(0, 0, 380, 330, 20, 20);
+
+        painter.end();
+
+        imageLabel->setPixmap(rounded);
     } else {
         imageLabel->setText("imm non trovata");
     }
 
+
     //agg testi
-    titleLabel->setText(song.getTitle());
-    authorLabel->setText(song.getAuthor());
+    titleLabel->setText(QString("- %1 -").arg(song.getTitle()));
+    authorLabel->setText(QString("- %1 -").arg(song.getAuthor()));
 
     qDebug() << "pl aggiornato con" << song.getTitle() << ", " << song.getAuthor();
 

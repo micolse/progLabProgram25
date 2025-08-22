@@ -20,6 +20,9 @@ public:
 
     const Song& currentSong() const; //questo è per ritornare il path alla canzone
     int currentIndex() const; //a che punto siamo delle immagini, tipo 1, 2..
+    int getIntervalSeconds() const {
+        return intervalSeconds;
+    }
 
 private slots:
     void nextSong(); //ogni volta che ricomincia il timer aumenta l'index e cambia canzone (e poi chiama notify per obsv)
@@ -28,6 +31,7 @@ private:
     std::vector<Song> songs;
     int index;
     QTimer* timer;
+    int intervalSeconds;
 };
 
 #endif // PLAYLIST_H

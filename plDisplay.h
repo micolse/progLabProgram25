@@ -15,6 +15,7 @@ public:
 
     void update(int currentIndex) override; //il punto di pldisplay: implementare il cambiamento della canzone ogni volta che vede in playlist che è cambiata
     void setPlaylist(Playlist* playlist);
+    void setLabels(QLabel* image, QLabel* title, QLabel* author);
 
 private:
     Playlist* playlistRef; //è il puntatore alla playlist che l'observer concreto sta "osservando"

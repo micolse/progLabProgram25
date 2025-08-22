@@ -2,14 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
 #include "playlist.h"   //per creare la playlist
 #include "plDisplay.h"  //observer concreto
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;   //classe Ui::MainWindow con tutti gli el grafici
+class MainWindow;
 }
 QT_END_NAMESPACE
+
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -24,7 +26,7 @@ private slots:  //cose che verranno eseguite quando clicco i bottoni GUI
     void onStopClicked();
 
 private:
-    Ui::MainWindow *ui; //puntatore alla GUI
+    Ui::MainWindow *ui;
     Playlist* playlist; //la playlist
     PlDisplay* display; //observer
 };

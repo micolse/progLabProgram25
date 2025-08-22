@@ -1,14 +1,22 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>  //per scegliere i file da aggiungere
-#include <QMessageBox>  //voglio eventuali avvisi all'utente
+#include <QMessageBox>
 #include <QInputDialog>
 #include <QLineEdit>
+#include <QVBoxLayout>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), playlist(new Playlist(this)), display(new PlDisplay(playlist, this)) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);  //chiama il codice che crea i widget nella finestra
 
-    connect(ui->addImageButton, &QPushButton::clicked, this, &MainWindow::onAddImageClicked);   //ho connesso i pulsanti ai metodi che li rappresentano
+    playlist = new Playlist(this);
+
+    display = new PlDisplay(this); //creo pldisplay e poi aggancio playlist, perchè farlo nel costruttore mi dava errore
+    display->setPlaylist(playlist);
+
+    display->setLabels(ui->imageLabel, ui->titleLabel, ui->authorLabel);
+
+    connect(ui->addSongButton, &QPushButton::clicked, this, &MainWindow::onAddSongClicked);   //ho connesso i pulsanti ai metodi che li rappresentano
     connect(ui->startButton, &QPushButton::clicked, this, &MainWindow::onStartClicked);
     connect(ui->stopButton, &QPushButton::clicked, this, &MainWindow::onStopClicked);
 }
@@ -48,7 +56,7 @@ void MainWindow::onAddSongClicked() {
 }
 
 void MainWindow::onStartClicked() {
-    playlist->startTempSlide(2);    //scelto 2 sec
+    playlist->startTempSlide(2);    //scelto 6 sec
 }
 
 void MainWindow::onStopClicked() {
