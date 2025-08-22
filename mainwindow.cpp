@@ -38,17 +38,16 @@ void MainWindow::onAddSongClicked() {
         return;
     }
 
-    bool ok;
-    QString title = QInputDialog::getText(this, "Titolo della canzone", "Inserisci titolo:", QLineEdit::Normal, "", &ok);
-    if (!ok || title.isEmpty()) {
-        QMessageBox::information(this, "Titolo mancante", "Titolo non inserito.");
-        return;
-    }
+    QString fileName = QFileInfo(imagePath).baseName();
 
-    QString author = QInputDialog::getText(this, "Autore della canzone", "Inserisci l'autore:", QLineEdit::Normal, "", &ok);
-    if (!ok || author.isEmpty()) {
-        QMessageBox::information(this, "Autore mancante", "Autore non inserito.");
-        return;
+    QString title, author;
+    QStringList parts = fileName.split('_');
+    if (parts.size() >= 2) {
+        title = parts[0];
+        author = parts[1];
+    } else {
+        title = fileName;
+        author = "Unknown";
     }
 
     playlist->addSong(imagePath, title, author);
@@ -56,7 +55,7 @@ void MainWindow::onAddSongClicked() {
 }
 
 void MainWindow::onStartClicked() {
-    playlist->startTempSlide(2);    //scelto 6 sec
+    playlist->startTempSlide(2);    //scelto 2 sec
 }
 
 void MainWindow::onStopClicked() {
