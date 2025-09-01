@@ -12,20 +12,19 @@ class Playlist : public Subject {
     Q_OBJECT
 
 public:
-    Playlist(QObject* parent = nullptr); //sono su Qt, e richiede spesso che ogni oggetto abbia un genitore, per gestire la memoria in automatico
+    Playlist(QObject* parent = nullptr);
 
-    void addSong(const QString& imagePath, const QString& title, const QString& author); //add, e usa il path da cui prendere la foto, poi titolo e autore
-    void startTempSlide(int seconds); //inizia il timer (il timer di Qt di base lavora in millisecondi, io lo voglio in secondi perchè secondo me è piu leggibile
-    void stopTempSlide(); //ferma lo slideshow
+    void addSong(const QString& imagePath, const QString& title, const QString& author);
+    void startTempSlide(int seconds);
+    void stopTempSlide();
 
-    const Song& currentSong() const; //questo è per ritornare il path alla canzone
-    int currentIndex() const; //a che punto siamo delle immagini, tipo 1, 2..
+    const Song& currentSong() const;
+    int currentIndex() const;
     int getIntervalSeconds() const {
         return intervalSeconds;
     }
 
-private slots:
-    void nextSong(); //ogni volta che ricomincia il timer aumenta l'index e cambia canzone (e poi chiama notify per obsv)
+    void nextSong();
 
 private:
     std::vector<Song> songs;

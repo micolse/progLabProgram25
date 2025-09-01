@@ -11,14 +11,14 @@ class PlDisplay : public QWidget, public Observer {
     Q_OBJECT
 
 public:
-    explicit PlDisplay(QWidget* parent = nullptr); //qui effettivamente vediamo l'uso dell'observer concreto: "osserva" la Playlist*
+    explicit PlDisplay(QWidget* parent = nullptr);
 
-    void update(int currentIndex) override; //il punto di pldisplay: implementare il cambiamento della canzone ogni volta che vede in playlist che è cambiata
+    void update(int currentIndex) override;
     void setPlaylist(Playlist* playlist);
     void setLabels(QLabel* image, QLabel* title, QLabel* author);
 
 private:
-    Playlist* playlistRef; //è il puntatore alla playlist che l'observer concreto sta "osservando"
+    Playlist* playlistRef;
 
     QLabel* imageLabel;
     QLabel* titleLabel;

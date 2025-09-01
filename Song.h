@@ -3,7 +3,7 @@
 
 #include <QString>
 
-class Song {    //quando creo una canzone, passa direttamente imagepath, titolo ed autore
+class Song {
 public:
     Song(const QString& imagePath, const QString& title, const QString& author);
 

@@ -3,16 +3,16 @@
 #include <QDebug>
 
 
-Playlist::Playlist(QObject* parent) : Subject(), index(-1), timer(new QTimer(this)){ //index iniy a -1, crea il timer e lo connette a nextIm()
+Playlist::Playlist(QObject* parent) : Subject(), index(-1), timer(new QTimer(this)){
     connect(timer, &QTimer::timeout, this, &Playlist::nextSong);
-    qDebug() << "Playlist creata e timer connesso ✅"; // comodi per vedere cosa sta succedendo
+    qDebug() << "Playlist creata e timer connesso ✅";
 }
 
-void Playlist::addSong(const QString &imagePath, const QString& title, const QString& author) { //per agg imm
-    songs.emplace_back(imagePath, title, author);   //crea una song e la aggiunge
+void Playlist::addSong(const QString &imagePath, const QString& title, const QString& author) {
+    songs.emplace_back(imagePath, title, author);
     qDebug() << "Aggiunta canzone: " << title << "di" << author;
 
-    if (index == -1) { //se è la prima im aggiunta aggiorna subito
+    if (index == -1) {
         index = 0;
         qDebug() << "canzone ad indice:" << index;
         notify(index);
@@ -32,7 +32,7 @@ void Playlist::nextSong() {
     if (songs.empty())
         return;
 
-    index = (index +1) % songs.size(); // il % serve per il modulo perché è un loop e deve tornare all'inizio
+    index = (index +1) % songs.size();
     notify(index);
 }
 

@@ -12,7 +12,7 @@ PlDisplay::PlDisplay(QWidget* parent) : QWidget(parent), playlistRef(nullptr), i
 void PlDisplay::setPlaylist(Playlist* playlist) {
     playlistRef = playlist;
     if (playlistRef) {
-        playlistRef->attach(this);  //attacco la playlist
+        playlistRef->attach(this);
         qDebug() << "pldisp agganciato";
     }
 }
@@ -23,7 +23,7 @@ void PlDisplay::setLabels(QLabel* image, QLabel* title, QLabel* author) {
     authorLabel = author;
 }
 
-void PlDisplay::update(int currentIndex) { //qua aggiornerà la visualizzazione dell'imm cambiando la foto mostrata
+void PlDisplay::update(int currentIndex) {
     if (!playlistRef || !imageLabel || !titleLabel || !authorLabel) {
         qDebug() << "pl non inizializzata correttamente";
         return;

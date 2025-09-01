@@ -4,7 +4,7 @@
 class Observer {
 public:
     virtual ~Observer() {}
-    virtual void update(int currentIndex) = 0; //praticamente ogni volta che la playlist cambia "canzone" viene chiamato, perchè updata le immagini
+    virtual void update(int currentIndex) = 0;
 };
 
 #endif // OBSERVER_H

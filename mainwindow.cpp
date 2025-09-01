@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QFileDialog>  //per scegliere i file da aggiungere
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QLineEdit>
@@ -8,7 +8,7 @@
 #include <QDir>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
-    ui->setupUi(this);  //chiama il codice che crea i widget nella finestra
+    ui->setupUi(this);
 
     playlist = new Playlist(this);
 
@@ -17,24 +17,24 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     display->setLabels(ui->imageLabel, ui->titleLabel, ui->authorLabel);
 
-    connect(ui->addSongButton, &QPushButton::clicked, this, &MainWindow::onAddSongClicked);   //ho connesso i pulsanti ai metodi che li rappresentano
+    connect(ui->addSongButton, &QPushButton::clicked, this, &MainWindow::onAddSongClicked);
     connect(ui->startButton, &QPushButton::clicked, this, &MainWindow::onStartClicked);
     connect(ui->stopButton, &QPushButton::clicked, this, &MainWindow::onStopClicked);
 }
 
-MainWindow::~MainWindow() { //distruttore
+MainWindow::~MainWindow() {
     delete ui;
 }
 
 void MainWindow::onAddSongClicked() {
-    QString folderPath = QFileDialog::getExistingDirectory(   //tecnicamente aprirebbe una finestra per scegliere l'immagine
-        this,   //la finestra principale
-        "Seleziona la cartella",    //il titolo della fin
-        "" //sarebbe la cartella (corrente, iniziale)
+    QString folderPath = QFileDialog::getExistingDirectory(
+        this,
+        "Seleziona la cartella",
+        ""
     );
 
     if (folderPath.isEmpty()) {
-        QMessageBox::information(this, "nessuna cartella sel", "seleziona cartella");  //tipo se non trova l'immagine nel path, o se non ha selezionato nulla, ti avvisa
+        QMessageBox::information(this, "nessuna cartella sel", "seleziona cartella");
         return;
     }
 
@@ -51,8 +51,7 @@ void MainWindow::onAddSongClicked() {
     for (const QString &fileName : files) {
         QString filePath = dir.filePath(fileName);
 
-        // Divide il nome del file in titolo e autore usando "_"
-        QString baseName = QFileInfo(fileName).completeBaseName(); // senza estensione
+        QString baseName = QFileInfo(fileName).completeBaseName();
         QStringList parts = baseName.split('_');
         QString title = parts.value(0, "Titolo sconosciuto");
         QString author = parts.value(1, "Autore sconosciuto");
@@ -62,9 +61,9 @@ void MainWindow::onAddSongClicked() {
 }
 
 void MainWindow::onStartClicked() {
-    playlist->startTempSlide(2);    //scelto 2 sec
+    playlist->startTempSlide(3);
 }
 
 void MainWindow::onStopClicked() {
-    playlist->stopTempSlide();  //ferma il timer
+    playlist->stopTempSlide();
 }

@@ -63,6 +63,7 @@ add_executable(tests
     tests/main_test.cpp
     playlist.cpp
     song.cpp
+    subject.h
 )
 
 target_link_libraries(tests
