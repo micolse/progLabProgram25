@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -50,6 +51,29 @@ else()
 endif()
 
 target_link_libraries(progLabProgram25 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+#config test---
+add_subdirectory(${CMAKE_SOURCE_DIR}/googletest-main)
+
+include_directories(${CMAKE_SOURCE_DIR}/googletest-main/googletest/include)
+
+include_directories(${CMAKE_SOURCE_DIR})
+
+add_executable(tests
+    tests/main_test.cpp
+    playlist.cpp
+    song.cpp
+)
+
+target_link_libraries(tests
+    gtest
+    gtest_main
+    Qt${QT_VERSION_MAJOR}::Widgets
+)
+
+enable_testing()
+add_test(NAME PlaylistTests COMMAND tests)
+#---
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
